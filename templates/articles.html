@@ -1,0 +1,64 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="row">
+
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <h3>Makaleler</h3>
+
+            <form>
+                {% csrf_token %}
+                <input type="text" name="keyword" class="input-sm" maxlength="64" placeholder="Ara">
+                <button type="submit" class="btn btn-danger">Ara</button>
+            </form>
+
+
+            <hr>
+        </div>
+    </div>
+</div>
+
+{% if articles %} {% for article in articles %}
+
+<div class="row">
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+
+
+            <a href="{% url 'article:detail' article.id %}">
+                <h2 class="fw-bolder mb-1">{{article.title}}</h2>
+            </a>
+            <p class="lead">
+                {{ article.author.username }} tarafından kaydedildi.
+            </p>
+            <hr/>
+
+            <p> {{ article.created_date }}</p>
+
+            <hr/> {% if article.article_image %}
+            <a href="{% url 'article:detail' article.id %}">
+                <img class="img-fluid rounded" src="{{article.article_image.url}}" alt=""></a> {% endif %}
+            <hr/>
+
+
+            <p class="lead">
+                {{ article.content|safe|truncatewords:35 }}
+            </p>
+            <a href="{% url 'article:detail' article.id %}" class="btn btn-danger">Devamını Oku</a>
+
+        </div>
+    </div>
+</div>
+
+{% endfor %} {% else %}
+<div class="row">
+
+    <div class="col-md-10 offset-md-3">
+        <div class="col-lg-8">
+            <div class="alert alert-danger">
+                Makale Bulunamadı
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %} {% endblock body %}
